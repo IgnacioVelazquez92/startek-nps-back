@@ -3,6 +3,8 @@ const { Schema } = mongoose;
 
 const encuestaSchema = new Schema({
   "Metadatos de la encuesta - Fecha de inicio (+00:00 GMT)": Date,
+  Fecha: Date,
+  Hora: Date,
   "Metadatos de la encuesta - Fecha de finalización (+00:00 GMT)": Date,
   "Metadatos de la encuesta - Dirección IP": String,
   "Metadatos de la encuesta - Finalizado": String,
