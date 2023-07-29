@@ -38,6 +38,38 @@ const getNpsByU = async (req, res) => {
   }
 };
 
+const getNpsByDate = async (req, res) => {
+  try {
+    const { desde, hasta } = req.query;
+
+    // Convierte las cadenas de fecha en objetos Date
+    const fechaDesde = new Date(desde);
+    const fechaHasta = new Date(hasta);
+
+    // Si las fechas no son válidas, devuelve un error
+    if (isNaN(fechaDesde) || isNaN(fechaHasta)) {
+      return res
+        .status(400)
+        .json({ error: "Las fechas ingresadas no son válidas." });
+    }
+
+    // Agrega 1 día a la fechaHasta para que el rango incluya las encuestas del último día seleccionado
+    fechaHasta.setDate(fechaHasta.getDate() + 1);
+
+    // Consulta las encuestas dentro del rango de fechas
+    const encuestas = await Encuesta.find({
+      Fecha: {
+        $gte: fechaDesde,
+        $lt: fechaHasta,
+      },
+    });
+
+    res.json(encuestas);
+  } catch (error) {
+    res.status(500).json({ error: "Hubo un error al obtener las encuestas." });
+  }
+};
+
 const getAll = async (req, res) => {
   try {
     const resp = await obtenerTodo();
@@ -57,4 +89,5 @@ module.exports = {
   getNpsByEmail,
   getNpsByU,
   getAll,
+  getNpsByDate,
 };
