@@ -3,12 +3,12 @@ const encuesta = require("../models/nps.model");
 const ObtenerPorEmail = async (email) => {
   console.log(email);
   return await encuesta.find({
-    "Campos de contacto - Correo electrónico del destinatario": email,
+    Email: email,
   });
 };
 
 const ObtenerPorU = async (UsuarioU) => {
-  return await encuesta.find({ "Datos embebidos - AGENTE_RP": UsuarioU });
+  return await encuesta.find({ UsuarioU: UsuarioU });
 };
 
 const obtenerTodo = async () => {
