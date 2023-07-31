@@ -77,7 +77,7 @@ const getNpsByDateAndU = async (req, res) => {
     const fromDate = parse(desde, "dd/MM/yyyy", new Date());
     const toDate = parse(hasta, "dd/MM/yyyy", new Date());
 
-    log(fromDate, toDate);
+    console.log(fromDate, toDate, UsuarioU);
 
     if (!fromDate || !toDate || !UsuarioU) {
       return res.status(400).json({ error: "Se requieren los datos" });
