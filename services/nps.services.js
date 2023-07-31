@@ -21,8 +21,35 @@ const obtenerTodo = async () => {
   }
 };
 
+const encuestasFiltradasPorFecha = async (fromDate, toDate) => {
+  try {
+    const encuestasFiltradas = await encuesta.find({
+      Fecha: { $gte: fromDate, $lte: toDate },
+    });
+    return encuestasFiltradas;
+  } catch (error) {
+    console.error("Error en la consulta:", error);
+    throw new Error("Error al obtener las encuestas.");
+  }
+};
+
+const encuestasFiltradasPorFechayU = async (fromDate, toDate, usuarioU) => {
+  try {
+    const encuestasFiltradas = await encuesta.find({
+      Fecha: { $gte: fromDate, $lte: toDate },
+      UsuarioU: usuarioU,
+    });
+    return encuestasFiltradas;
+  } catch (error) {
+    console.error("Error en la consulta:", error);
+    throw new Error("Error al obtener las encuestas.");
+  }
+};
+
 module.exports = {
   ObtenerPorEmail,
   ObtenerPorU,
   obtenerTodo,
+  encuestasFiltradasPorFecha,
+  encuestasFiltradasPorFechayU,
 };

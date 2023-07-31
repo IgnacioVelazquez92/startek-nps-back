@@ -2,7 +2,11 @@ const {
   ObtenerPorEmail,
   ObtenerPorU,
   obtenerTodo,
+  encuestasFiltradasPorFecha,
+  encuestasFiltradasPorFechayU,
 } = require("../services/nps.services");
+
+const { parse } = require("date-fns");
 
 const getNpsByEmail = async (req, res) => {
   try {
@@ -40,29 +44,49 @@ const getNpsByU = async (req, res) => {
 
 const getNpsByDate = async (req, res) => {
   try {
-    const { desde, hasta } = req.query;
+    const { desde, hasta } = req.body;
 
-    // Convierte las cadenas de fecha en objetos Date
-    const fechaDesde = new Date(desde);
-    const fechaHasta = new Date(hasta);
+    // Parsear las fechas desde las cadenas al formato de objeto Date
+    const fromDate = parse(desde, "dd/MM/yyyy", new Date());
+    const toDate = parse(hasta, "dd/MM/yyyy", new Date());
 
-    // Si las fechas no son válidas, devuelve un error
-    if (isNaN(fechaDesde) || isNaN(fechaHasta)) {
+    if (!fromDate || !toDate) {
       return res
         .status(400)
-        .json({ error: "Las fechas ingresadas no son válidas." });
+        .json({ error: 'Se requieren ambas fechas: "desde" y "hasta".' });
     }
 
-    // Agrega 1 día a la fechaHasta para que el rango incluya las encuestas del último día seleccionado
-    fechaHasta.setDate(fechaHasta.getDate() + 1);
+    const encuestas = await encuestasFiltradasPorFecha(fromDate, toDate);
+    if (!encuestas) {
+      return res.status(404).json({ msg: "no se hallaron encuestas" });
+    }
 
-    // Consulta las encuestas dentro del rango de fechas
-    const encuestas = await Encuesta.find({
-      Fecha: {
-        $gte: fechaDesde,
-        $lt: fechaHasta,
-      },
-    });
+    res.json(encuestas);
+  } catch (error) {
+    res.status(500).json({ error: "Hubo un error al obtener las encuestas." });
+  }
+};
+
+const getNpsByDateAndU = async (req, res) => {
+  try {
+    const { desde, hasta, UsuarioU } = req.body;
+
+    // Parsear las fechas desde las cadenas al formato de objeto Date
+    const fromDate = parse(desde, "dd/MM/yyyy", new Date());
+    const toDate = parse(hasta, "dd/MM/yyyy", new Date());
+
+    if (!fromDate || !toDate || !UsuarioU) {
+      return res.status(400).json({ error: "Se requieren los datos" });
+    }
+
+    const encuestas = await encuestasFiltradasPorFechayU(
+      fromDate,
+      toDate,
+      UsuarioU
+    );
+    if (!encuestas) {
+      return res.status(404).json({ msg: "no se hallaron encuestas" });
+    }
 
     res.json(encuestas);
   } catch (error) {
@@ -90,4 +114,5 @@ module.exports = {
   getNpsByU,
   getAll,
   getNpsByDate,
+  getNpsByDateAndU,
 };
