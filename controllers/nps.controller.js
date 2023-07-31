@@ -46,6 +46,8 @@ const getNpsByDate = async (req, res) => {
   try {
     const { desde, hasta } = req.body;
 
+    console.log(desde, hasta);
+
     // Parsear las fechas desde las cadenas al formato de objeto Date
     const fromDate = parse(desde, "dd/MM/yyyy", new Date());
     const toDate = parse(hasta, "dd/MM/yyyy", new Date());
@@ -74,6 +76,8 @@ const getNpsByDateAndU = async (req, res) => {
     // Parsear las fechas desde las cadenas al formato de objeto Date
     const fromDate = parse(desde, "dd/MM/yyyy", new Date());
     const toDate = parse(hasta, "dd/MM/yyyy", new Date());
+
+    log(fromDate, toDate);
 
     if (!fromDate || !toDate || !UsuarioU) {
       return res.status(400).json({ error: "Se requieren los datos" });
