@@ -71,22 +71,22 @@ const getNpsByDate = async (req, res) => {
 
 const getNpsByDateAndU = async (req, res) => {
   try {
-    const { desde, hasta, UsuarioU } = req.body;
+    const { desde, hasta, usuarioU } = req.body;
 
     // Parsear las fechas desde las cadenas al formato de objeto Date
     const fromDate = parse(desde, "dd/MM/yyyy", new Date());
     const toDate = parse(hasta, "dd/MM/yyyy", new Date());
 
-    console.log(fromDate, toDate, UsuarioU);
+    console.log(fromDate, toDate, usuarioU);
 
-    if (!fromDate || !toDate || !UsuarioU) {
+    if (!fromDate || !toDate || !usuarioU) {
       return res.status(400).json({ error: "Se requieren los datos" });
     }
 
     const encuestas = await encuestasFiltradasPorFechayU(
       fromDate,
       toDate,
-      UsuarioU
+      usuarioU
     );
     if (!encuestas) {
       return res.status(404).json({ msg: "no se hallaron encuestas" });
