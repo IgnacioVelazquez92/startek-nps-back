@@ -74,8 +74,8 @@ const getNpsByDateAndU = async (req, res) => {
     const { desde, hasta, usuarioU } = req.body;
 
     // Parsear las fechas desde las cadenas al formato de objeto Date
-    const fromDate = parse(desde, "dd/MM/yyyy", new Date());
-    const toDate = parse(hasta, "dd/MM/yyyy", new Date());
+    const fromDate = new Date(desde);
+    const toDate = new Date(hasta);
 
     console.log(fromDate, toDate, usuarioU);
 
@@ -88,8 +88,9 @@ const getNpsByDateAndU = async (req, res) => {
       toDate,
       usuarioU
     );
-    if (!encuestas) {
-      return res.status(404).json({ msg: "no se hallaron encuestas" });
+
+    if (encuestas.length === 0) {
+      return res.status(404).json({ msg: "No se hallaron encuestas" });
     }
 
     res.json(encuestas);
