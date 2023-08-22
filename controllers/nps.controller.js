@@ -4,6 +4,7 @@ const {
   obtenerTodo,
   encuestasFiltradasPorFecha,
   encuestasFiltradasPorFechayU,
+  encuestasFiltradasPorFechayULider,
 } = require("../services/nps.services");
 
 const { parse } = require("date-fns");
@@ -99,6 +100,36 @@ const getNpsByDateAndU = async (req, res) => {
   }
 };
 
+const getNpsByDateAndULeader = async (req, res) => {
+  try {
+    const { desde, hasta, U_LIDER } = req.body;
+
+    // Parsear las fechas desde las cadenas al formato de objeto Date
+    const fromDate = new Date(desde);
+    const toDate = new Date(hasta);
+
+    console.log(fromDate, toDate, U_LIDER);
+
+    if (!fromDate || !toDate || !U_LIDER) {
+      return res.status(400).json({ error: "Se requieren los datos" });
+    }
+
+    const encuestas = await encuestasFiltradasPorFechayULider(
+      fromDate,
+      toDate,
+      U_LIDER
+    );
+
+    if (encuestas.length === 0) {
+      return res.status(404).json({ msg: "No se hallaron encuestas" });
+    }
+
+    res.json(encuestas);
+  } catch (error) {
+    res.status(500).json({ error: "Hubo un error al obtener las encuestas." });
+  }
+};
+
 const getAll = async (req, res) => {
   try {
     const resp = await obtenerTodo();
@@ -120,4 +151,5 @@ module.exports = {
   getAll,
   getNpsByDate,
   getNpsByDateAndU,
+  getNpsByDateAndULeader,
 };

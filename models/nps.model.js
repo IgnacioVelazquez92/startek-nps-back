@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 const encuestaSchema = new Schema({
   _recordId: String,
   Fecha: Date,
+  Fecha_Resp: Date,
   Email: String,
   NPS_GROUP: String,
   NPS_Calification: Number,
@@ -25,6 +26,10 @@ const encuestaSchema = new Schema({
   UsuarioU: String,
   SITIO: String,
   VAG: String,
+  RAC: String,
+  LIDER: String,
+  SUP: String,
+  U_LIDER: String,
 });
 
 // Define el modelo basado en el esquema
