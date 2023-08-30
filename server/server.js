@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 
 const npsRoute = require("../Routes/nps.routes");
-const loginAuth = require("../routes/user.routes");
+const loginAuth = require("../Routes/user.routes");
 
 const cors = require("cors");
 const morgan = require("morgan");
