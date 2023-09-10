@@ -59,6 +59,30 @@ const encuestasFiltradasPorFechayULider = async (fromDate, toDate, U_LIDER) => {
   }
 };
 
+const guardarEncuesta = async (item) => {
+  try {
+    // Verifica si la encuesta ya existe en la base de datos
+    const existeEncuesta = await encuesta.findOne({
+      _recordId: item._recordId,
+    });
+
+    if (!existeEncuesta) {
+      // Si no existe, crea una nueva encuesta en la base de datos
+      await encuesta.create(item);
+      console.log(`Encuesta con _recordId ${item._recordId} guardada.`);
+      return true; // Retorna true si la encuesta se guarda con éxito
+    } else {
+      console.log(
+        `Encuesta con _recordId ${item._recordId} ya existe, no se guardará.`
+      );
+      return false; // Retorna false si la encuesta ya existe
+    }
+  } catch (error) {
+    console.error("Error al guardar la encuesta:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   ObtenerPorEmail,
   ObtenerPorU,
@@ -66,4 +90,5 @@ module.exports = {
   encuestasFiltradasPorFecha,
   encuestasFiltradasPorFechayU,
   encuestasFiltradasPorFechayULider,
+  guardarEncuesta,
 };
