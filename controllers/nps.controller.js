@@ -177,6 +177,16 @@ const saveEncuesta = async (req, res) => {
         // Convierte el número de Excel en una fecha válida
         item.Fecha_Resp = excelSerialNumberToDate(item.Fecha_Resp);
       }
+      // Convierte los campos a mayúsculas antes de guardar
+      if (item.Email) {
+        item.Email = item.Email.toUpperCase();
+      }
+      if (item.UsuarioU) {
+        item.UsuarioU = item.UsuarioU.toUpperCase();
+      }
+      if (item.U_LIDER) {
+        item.U_LIDER = item.U_LIDER.toUpperCase();
+      }
 
       // Utiliza el servicio para guardar la encuesta
       const encuestaGuardada = await guardarEncuesta(item);
