@@ -9,6 +9,7 @@ const morgan = require("morgan");
 require("dotenv/config");
 require("../dataBase/dbConnection");
 const PORT = process.env.PORT;
+process.env.TZ = "America/Argentina/Buenos_Aires";
 // Middlewares
 app.use(cors());
 app.use(morgan("dev"));
